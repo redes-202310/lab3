@@ -1,45 +1,51 @@
 import socket
+import threading
 
 # Create a TCP socket
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Bind the socket to a specific IP address and port number
-ip_address = "127.0.0.1" # Change this to the IP address of your machine
-port_number = 8001 # Change this to any available port number
-tcp_socket.bind((ip_address, port_number))
+# Bind the socket to a port
+server_ip = "127.0.0.1" # Change this to the IP address of the server
+server_port = 8000 # Change this to the port number that the server will listen on
+tcp_socket.bind((server_ip, server_port))
 
-# Listen for client connections
-tcp_socket.listen()
+# Listen for incoming connections
+tcp_socket.listen(3)
 
-# Function to send a file to a client
-def send_file(client_socket, filename):
-    # Open the requested file and read its data
-    with open(filename, "rb") as f:
-        file_data = f.read()
+# Initialize a list to store the connected clients
+clients = []
 
-    # Send the file data to the client
-    client_socket.sendall(file_data)
-    print("Sent file to client")
-
-# Serve files to clients
-while True:
+# Wait for 25 clients to connect
+while len(clients) < 3:
     # Accept a new client connection
-    client_socket, address = tcp_socket.accept()
+    client_socket, client_address = tcp_socket.accept()
+    
+    # Add the new client to the list of connected clients
+    clients.append(client_socket)
+    
+    # Send a message to the client to indicate that it has successfully connected
+    client_socket.send(b"You have successfully connected to the server.")
 
-    # Receive a request for a file
-    filename = client_socket.recv(1024).decode()
+# Wait for a "send_file" request from any client
+while True:
+    for client_socket in clients:
+        # Receive a message from the client
+        message = client_socket.recv(1024)
+        
+        # If the message is a "send_file" request, send the file data to all clients
+        if message.decode() == "send_file":
+            # Open the file to be sent
+            with open("filea.txt", "rb") as f: # Change this to the name of the file to be sent
+                file_data = f.read()
 
-    # Check if the requested file exists
-    try:
-        with open(filename, "rb") as f:
-            pass
-    except FileNotFoundError:
-        client_socket.sendall(b"File not found")
-        client_socket.close()
-        continue
+            # Send the file data to all connected clients
+            for client_socket in clients:
+                client_socket.send(str(len(file_data)).encode())
+                client_socket.send(file_data)
 
-    # Send the file to the client
-    send_file(client_socket, filename)
-
-    # Close the client connection
+# Close all client sockets
+for client_socket in clients:
     client_socket.close()
+
+# Close the server socket
+tcp_socket.close()

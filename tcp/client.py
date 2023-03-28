@@ -1,27 +1,45 @@
 import socket
+import hashlib
 
 # Create a TCP socket
-tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Connect the socket to the server
+# Connect to the server
 server_ip = "127.0.0.1" # Change this to the IP address of the server
-server_port = 8000 # Change this to the port number that the server is listening on
-tcp_socket.connect((server_ip, server_port))
+server_port = 8001 # Change this to the port number that the server is listening on
+client_socket.connect((server_ip, server_port))
 
-# Send a message to the server to indicate that the client has successfully connected
-message = tcp_socket.recv(1024)
+# Receive a message from the server indicating that the connection was successful
+message = client_socket.recv(1024)
 print(message.decode())
 
-# Send a "send_file" request to the server
-tcp_socket.send(b"send_file")
+# Send a message to the server indicating that the client is ready to receive the file
+client_socket.send(b"ready")
+
+# Receive the file size and hash value from the server
+file_size = int(client_socket.recv(1024).decode())
+hash_value = client_socket.recv(1024).decode()
+
+# Initialize the received file data
+file_data = b""
 
 # Receive the file data from the server
-file_size = int(tcp_socket.recv(1024).decode())
-file_data = tcp_socket.recv(file_size)
+while len(file_data) < file_size:
+    chunk = client_socket.recv(1024)
+    if not chunk:
+        break
+    file_data += chunk
 
-# Save the file to disk
-with open("received_file.txt", "wb") as f:
-    f.write(file_data)
+# Calculate the hash value of the received file data
+received_hash_value = hashlib.sha256(file_data).hexdigest()
 
-# Close the socket
-tcp_socket.close()
+# Send a confirmation message to the server indicating that the file was received successfully
+if received_hash_value == hash_value:
+    print("File received successfully.")
+    client_socket.send(b"received")
+else:
+    print("File received with errors.")
+    client_socket.send(b"error")
+
+# Close the client socket
+client_socket.close()

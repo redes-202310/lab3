@@ -9,13 +9,19 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket.sendto(b"send_file", (ip_address, port_number))
 
 FRAGMENT_SIZE = 8000
+
+chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
+print(f"Received {len(chunk_data)} bytes from {server_addr}")
+print(f"Chunk data: {chunk_data}")
+
+if chunk_data == b"ACK":
+    print("Received ACK")
 # open a file to write the received data to
 with open('received_file.txt', 'wb') as file:
     while True:
         # receive a chunk of data
+        
         chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
-        print(f"Received {len(chunk_data)} bytes from {server_addr}")
-        print(f"Chunk data: {chunk_data}")
         # write the chunk data to the file
         file.write(chunk_data)
         

@@ -38,16 +38,32 @@ if file_name in file_paths:
     
     if 0 < num_clients <= 25:
         while num_connected < num_clients:
-            read_socket, _, _ = select.select(client_sockets, [], [])
-
-            for sock in read_socket:
-                if sock == udp_socket:
-                    request_data, client_address = udp_socket.recvfrom(1024)
-                    print("received request from client", client_address)
+            try:
+                request_data, client_address = udp_socket.recvfrom(1024)
+            except:
+                request_data = False
+            if request_data:
+                if request_data == b"send_file":
+                    print("received request from client", client_address, request_data)
                     client_sockets.append(client_address)
+                    udp_socket.sendto(b"ACK", client_address)
                     num_connected += 1
-                else:
-                    client_address = sock
-                    send_file(client_address, file_path)
+                
+        # all have connected
+        print("All clients have connected")
+        for client_address in client_sockets:
+            if client_address != udp_socket:
+                send_file(client_address, file_path)
+            # read_socket, _, _ = select.select(client_sockets, [], [])
+
+            # for sock in read_socket:
+            #     if sock == udp_socket:
+            #         request_data, client_address = udp_socket.recvfrom(1024)
+            #         print("received request from client", client_address)
+            #         client_sockets.append(client_address)
+            #         num_connected += 1
+            #     else:
+            #         client_address = sock
+            #         send_file(client_address, file_path)
     else:
         print("Invalid number of clients")

@@ -116,7 +116,7 @@ if file_name in file_paths:
         # Log the transfer information
         log_file.write(f"File transfer to {num_clients} clients successful.\n")
         log_file.write(f"File name: {file_name}\n")
-        log_file.write(f"File size: {file_sizes[file_name]} bytes\n")
+        log_file.write(f"File size: {file_sizes[file_paths.get(file_name)]} bytes\n")
         log_file.write("Transfer times:\n")
         for i, time in enumerate(transfer_times):
             log_file.write(f"Client {i+1}: {time} seconds\n")

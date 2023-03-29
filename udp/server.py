@@ -17,7 +17,6 @@ file_paths = {"file_100MB": "data/file-100.txt", "file_250MB": "data/file-250.tx
 file_sizes = {"file_100MB": os.path.getsize(file_paths["file_100MB"]), "file_250MB": os.path.getsize(file_paths["file_250MB"]), "lorem": os.path.getsize(file_paths["lorem"])}
 
 
-print(os.getcwd())
 # Initialize the log file directory
 log_dir = "udp/Logs/Server/"
 
@@ -57,14 +56,23 @@ if file_name in file_paths:
         file_data = f.read()
     
     if 0 < num_clients <= 25:
+        try:
+            request_data, client_address = udp_socket.recvfrom(1024)
+        except Exception as exp:
+            request_data = False
+        if request_data:
+            if request_data == b"send_num_clients":
+                udp_socket.sendto(num_clients.to_bytes(), client_address)
+
         while num_connected < num_clients:
             try:
                 request_data, client_address = udp_socket.recvfrom(1024)
             except Exception as exp:
                 request_data = False
             if request_data:
+                print(request_data.decode())
                 if request_data == b"send_file":
-                    print("received request from client", client_address, request_data)
+                    print("Received request from client", client_address, request_data)
                     client_sockets.append(client_address)
                     udp_socket.sendto(b"ACK", client_address)
                     num_connected += 1
@@ -73,7 +81,6 @@ if file_name in file_paths:
         print("All clients have connected, preparing to send file.")
         for client_address in client_sockets:
             if client_address != udp_socket:
-                print("Sending to", client_address)
                 udp_socket.sendto(b"All clients have connected, preparing to send file.", client_address)
         
         client_num = 1
@@ -93,5 +100,6 @@ if file_name in file_paths:
         print("ACTIVE:", threading.active_count())
         print("All files sent")
         log_file.close()
+        udp_socket.close()
     else:
         print("Invalid number of clients")

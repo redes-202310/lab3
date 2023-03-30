@@ -3,3 +3,6 @@ transfer-files/
 data/
 udp/Logs/
 .vscode
+tcp/logs/
+tcp/Logs/
+tcp/received.txt

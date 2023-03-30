@@ -1,8 +1,8 @@
 .DS_Store
+.vscode
 transfer-files/
 data/
 udp/Logs/
-.vscode
-tcp/logs/
+udp/ArchivosRecibidos/
 tcp/Logs/
 tcp/received.txt

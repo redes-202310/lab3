@@ -52,17 +52,36 @@ client_sockets = [udp_socket]
 
 if file_name in file_paths:
     file_path = file_paths[file_name]
+    log_file.write(f"File name: {file_name}\n")
+    log_file.write(f"File size: {file_sizes[file_name]} bytes\n")
+
+    try:
+        request_data, client_address = udp_socket.recvfrom(1024)
+    except Exception as exp:
+        request_data = False
+    if request_data:
+        if request_data == b"send_num_clients":
+            udp_socket.sendto(num_clients.to_bytes(), client_address)
+    try:
+        request_data, client_address = udp_socket.recvfrom(1024)
+    except Exception as exp:
+        request_data = False
+    if request_data:
+        if request_data == b"send_file_name":
+            udp_socket.sendto(file_name.encode(), client_address)
+    try:
+        request_data, client_address = udp_socket.recvfrom(1024)
+    except Exception as exp:
+        request_data = False
+    if request_data:
+        if request_data == b"send_file_size":
+            udp_socket.sendto(file_sizes[file_name].to_bytes(length=64), client_address)
+
+
     with open(file_path, "rb") as f:
         file_data = f.read()
-    
     if 0 < num_clients <= 25:
-        try:
-            request_data, client_address = udp_socket.recvfrom(1024)
-        except Exception as exp:
-            request_data = False
-        if request_data:
-            if request_data == b"send_num_clients":
-                udp_socket.sendto(num_clients.to_bytes(), client_address)
+        
 
         while num_connected < num_clients:
             try:
@@ -84,8 +103,7 @@ if file_name in file_paths:
                 udp_socket.sendto(b"All clients have connected, preparing to send file.", client_address)
         
         client_num = 1
-        log_file.write(f"File name: {file_name}\n")
-        log_file.write(f"File size: {file_sizes[file_name]} bytes\n")
+        
         for client_address in client_sockets:
             if client_address != udp_socket:
                 thread = threading.Thread(target=send_file, args=(client_address, client_num, file_path))

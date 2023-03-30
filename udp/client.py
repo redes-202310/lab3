@@ -22,16 +22,6 @@ if not os.path.exists(log_dir):
 current_time = time.strftime("%Y-%m-%d_%H-%M-%S")
 log_file = open(log_dir + current_time + ".log", "w")
 
-
-# send a request for the file
-udp_socket.sendto(b"send_num_clients", (ip_address, port_number))
-
-chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
-print(f"Received {len(chunk_data)} bytes from {server_addr}")
-print(f"Chunk data: {chunk_data}")
-expected_clients = int.from_bytes(chunk_data, byteorder='big')
-print("Expected clients:", expected_clients)
-
 def handle_client_request(client_socket, client_num, test_num):
     
     client_socket.sendto(b"send_file", (ip_address, port_number)) # TODO: also send client number
@@ -42,9 +32,7 @@ def handle_client_request(client_socket, client_num, test_num):
     if chunk_data == b"ACK":
         print(f"{client_num}: You have succesfully connected to the server.")
 
-    print("here")
     chunk_data, server_addr = client_socket.recvfrom(FRAGMENT_SIZE)
-    print("here1")
     print(f"{client_num}: Received {len(chunk_data)} bytes from {server_addr}")
     print(f"{client_num}: Chunk data: {chunk_data}")
 
@@ -53,6 +41,7 @@ def handle_client_request(client_socket, client_num, test_num):
 
     file_name = f"{files_dir}Cliente{client_num}-Prueba{test_num}.txt"
 
+    start_time = time.time()
     with open(file_name, 'wb') as file:
         while True:
             # receive a chunk of data
@@ -68,10 +57,30 @@ def handle_client_request(client_socket, client_num, test_num):
             print(len(chunk_data))
             if len(chunk_data) < FRAGMENT_SIZE:
                 break
-
+    execution_time = time.time() - start_time
+    log_file.write(f"Transfer time for client {client_num}: {execution_time}s\n")
     print("File received successfully")
 
 
+# send a request for the file
+udp_socket.sendto(b"send_num_clients", (ip_address, port_number))
+
+chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
+expected_clients = int.from_bytes(chunk_data, byteorder='big')
+
+udp_socket.sendto(b"send_file_name", (ip_address, port_number))
+chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
+file_name = chunk_data.decode()
+
+udp_socket.sendto(b"send_file_size", (ip_address, port_number))
+chunk_data, server_addr = udp_socket.recvfrom(FRAGMENT_SIZE)
+file_size = int.from_bytes(chunk_data, byteorder='big')
+
+log_file.write(f"File name: {file_name}\n")
+log_file.write(f"File size: {file_size} bytes\n")
+
+
+print("Expected clients:", expected_clients)
 client_sockets = []
 for i in range(1, expected_clients + 1):
     # create socket for client
@@ -82,15 +91,17 @@ for i in range(1, expected_clients + 1):
     thread = threading.Thread(target=handle_client_request, args=(client_socket, i, 1))
     thread.start()
 
-# close the socket
+
+# TODO: como saber si es exitosa o no?
+# log_file.write("Suceessful transfer: " + str(successful_transfer) + "\n")
 
 active_threads = threading.active_count()
-print("ACTIVE:", threading.active_count())
+print("Active Clients:", threading.active_count())
 while active_threads > 1:
     active_threads = threading.active_count()
-print("ACTIVE:", threading.active_count())
-print("All files recv")
+print("All files received")
 
-# for client_socket in client_sockets:
-#     client_socket.close()
-# udp_socket.close()
+# close sockets
+for client_socket in client_sockets:
+    client_socket.close()
+udp_socket.close()

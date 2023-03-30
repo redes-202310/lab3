@@ -2,3 +2,6 @@
 transfer-files/
 data/
 udp/Logs/
+tcp/logs/
+tcp/Logs/
+tcp/received.txt

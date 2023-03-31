@@ -46,7 +46,7 @@ def send_file(client_address, client_num, file_path):
 
 
 file_name = input("Enter the name of the file to send (file_100MB or file_250MB): ")
-num_clients = int(input("Enter the number of clients to send the file to (1 or 2): ")) 
+num_clients = int(input("Enter the number of clients to send the file to: ")) 
 num_connected = 0
 client_sockets = [udp_socket]
 

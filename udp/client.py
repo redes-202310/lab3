@@ -56,10 +56,11 @@ def handle_client_request(client_socket, client_num, test_num):
 
 def determine_transfer_success(file_size):
     for i in range(1, expected_clients + 1):
-        file_name = f"ArchivosRecibidos/Cliente{i}-Prueba{test_num}.txt"
+        file_name = f"{os.getcwd()}/udp/ArchivosRecibidos/Cliente{i}-Prueba{test_num}.txt"
         if os.path.exists(file_name):
             if os.path.getsize(file_name) != file_size:
                 return False
+    return True
 
 
 
@@ -115,6 +116,7 @@ while active_threads > 1:
 print("All files received")
 
 successful_transfer = determine_transfer_success(file_size)
+print(successful_transfer)
 if successful_transfer:
     log_file.write("Suceessful transfer: Yes \n")
 else:

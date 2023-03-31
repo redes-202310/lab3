@@ -1,30 +1,30 @@
-Date and time: 2023-03-29 22:54:08.625044
+Date and time: 2023-03-31 11:29:01.000280
 File transfer to 25 clients successful.
 File name: file_100MB
 File size: 100003667 bytes
 Transfer times:
-Client 1: 1.941547155380249 seconds	Successful?:True
-Client 2: 1.9499809741973877 seconds	Successful?:True
-Client 3: 1.9524738788604736 seconds	Successful?:True
-Client 4: 1.9384057521820068 seconds	Successful?:True
-Client 5: 1.9323997497558594 seconds	Successful?:True
-Client 6: 1.937619924545288 seconds	Successful?:True
-Client 7: 1.9383018016815186 seconds	Successful?:True
-Client 8: 1.9281139373779297 seconds	Successful?:True
-Client 9: 1.9349000453948975 seconds	Successful?:True
-Client 10: 1.8656201362609863 seconds	Successful?:True
-Client 11: 1.9338512420654297 seconds	Successful?:True
-Client 12: 1.9339680671691895 seconds	Successful?:True
-Client 13: 1.9526610374450684 seconds	Successful?:True
-Client 14: 1.9235389232635498 seconds	Successful?:True
-Client 15: 1.9251749515533447 seconds	Successful?:True
-Client 16: 1.941391944885254 seconds	Successful?:True
-Client 17: 1.8851149082183838 seconds	Successful?:True
-Client 18: 1.9167590141296387 seconds	Successful?:True
-Client 19: 1.9159190654754639 seconds	Successful?:True
-Client 20: 1.9416399002075195 seconds	Successful?:True
-Client 21: 1.942657709121704 seconds	Successful?:True
-Client 22: 1.9480719566345215 seconds	Successful?:True
-Client 23: 1.9419798851013184 seconds	Successful?:True
-Client 24: 1.9471330642700195 seconds	Successful?:True
-Client 25: 1.9098238945007324 seconds	Successful?:True
+Client 1: 1.9702520370483398 seconds	Successful?:True
+Client 2: 1.959881067276001 seconds	Successful?:True
+Client 3: 1.9622750282287598 seconds	Successful?:True
+Client 4: 1.9613502025604248 seconds	Successful?:True
+Client 5: 1.967789888381958 seconds	Successful?:True
+Client 6: 1.9715609550476074 seconds	Successful?:True
+Client 7: 1.8975238800048828 seconds	Successful?:True
+Client 8: 1.8862850666046143 seconds	Successful?:True
+Client 9: 1.8873779773712158 seconds	Successful?:True
+Client 10: 1.8934779167175293 seconds	Successful?:True
+Client 11: 1.8959910869598389 seconds	Successful?:True
+Client 12: 1.9618840217590332 seconds	Successful?:True
+Client 13: 1.9745609760284424 seconds	Successful?:True
+Client 14: 1.967560052871704 seconds	Successful?:True
+Client 15: 1.9635300636291504 seconds	Successful?:True
+Client 16: 1.9762039184570312 seconds	Successful?:True
+Client 17: 1.9566962718963623 seconds	Successful?:True
+Client 18: 1.9711589813232422 seconds	Successful?:True
+Client 19: 1.9637930393218994 seconds	Successful?:True
+Client 20: 1.9509210586547852 seconds	Successful?:True
+Client 21: 1.9648683071136475 seconds	Successful?:True
+Client 22: 1.976736068725586 seconds	Successful?:True
+Client 23: 1.9648168087005615 seconds	Successful?:True
+Client 24: 1.959986925125122 seconds	Successful?:True
+Client 25: 1.955380916595459 seconds	Successful?:True

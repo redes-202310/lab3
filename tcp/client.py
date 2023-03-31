@@ -14,6 +14,9 @@ class Client(threading.Thread):
 
     def run(self):
         with self.lock:
+            files_directory = "ArchivosRecibidos/"
+            if not os.path.exists(files_directory):
+                os.makedirs(files_directory)
             # Create a TCP socket
             tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -36,8 +39,9 @@ class Client(threading.Thread):
                 print(f"Hash value: {hash_value}")
 
                 # Calculate the time taken to receive the file
+                file_name = f"{files_directory}Cliente{self.id+1}-Prueba.txt"
                 start_time = time.time()
-                self.receive_file("received.txt", tcp_socket)
+                self.receive_file(file_name, tcp_socket)
                 end_time = time.time()
 
                 print(f"Time taken to receive file: {end_time - start_time} seconds")
@@ -45,7 +49,7 @@ class Client(threading.Thread):
                 time.sleep(0.1)
 
                 # Verify the hash value of the received file data
-                calculated_hash = self.calculate_hash("received.txt")
+                calculated_hash = self.calculate_hash(file_name)
                 print(f"Calculated hash value: {calculated_hash}")
 
                 success = False

@@ -77,9 +77,6 @@ if file_name in file_paths:
         if request_data == b"send_file_size":
             udp_socket.sendto(file_sizes[file_name].to_bytes(length=64), client_address)
 
-
-    with open(file_path, "rb") as f:
-        file_data = f.read()
     if 0 < num_clients <= 25:
         
 

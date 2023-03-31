@@ -44,16 +44,8 @@ def handle_client_request(client_socket, client_num, test_num):
     start_time = time.time()
     with open(file_name, 'wb') as file:
         while True:
-            # receive a chunk of data
-            
             chunk_data, server_addr = client_socket.recvfrom(FRAGMENT_SIZE)
-            # write the chunk data to the file
             file.write(chunk_data)
-            
-            # send an acknowledgement to the server
-            # udp_socket.sendto(b"ACK", server_addr)
-            
-            # break out of the loop if we have received the entire file
             print(len(chunk_data))
             if len(chunk_data) < FRAGMENT_SIZE:
                 break
@@ -61,6 +53,28 @@ def handle_client_request(client_socket, client_num, test_num):
     log_file.write(f"Transfer time for client {client_num}: {execution_time}s\n")
     print("File received successfully")
 
+
+def determine_transfer_success(file_size):
+    for i in range(1, expected_clients + 1):
+        file_name = f"ArchivosRecibidos/Cliente{i}-Prueba{test_num}.txt"
+        if os.path.exists(file_name):
+            if os.path.getsize(file_name) != file_size:
+                return False
+
+
+
+valid_test_num = False
+test_num = 0
+while not valid_test_num:
+    try:
+        test_num = int(input("Enter test number: "))
+    except ValueError:
+        print("Invalid test number")
+    else:
+        if(test_num > 0):
+            valid_test_num = True
+        else:
+            print("Invalid test number")
 
 # send a request for the file
 udp_socket.sendto(b"send_num_clients", (ip_address, port_number))
@@ -88,18 +102,23 @@ for i in range(1, expected_clients + 1):
     client_sockets.append(client_socket)
     print(client_socket)
     # send request for file
-    thread = threading.Thread(target=handle_client_request, args=(client_socket, i, 1))
+    thread = threading.Thread(target=handle_client_request, args=(client_socket, i, test_num))
     thread.start()
 
 
 # TODO: como saber si es exitosa o no?
-# log_file.write("Suceessful transfer: " + str(successful_transfer) + "\n")
 
 active_threads = threading.active_count()
 print("Active Clients:", threading.active_count())
 while active_threads > 1:
     active_threads = threading.active_count()
 print("All files received")
+
+successful_transfer = determine_transfer_success(file_size)
+if successful_transfer:
+    log_file.write("Suceessful transfer: Yes \n")
+else:
+    log_file.write("Suceessful transfer: No \n")
 
 # close sockets
 for client_socket in client_sockets:

@@ -1,7 +1,6 @@
 .DS_Store
 .vscode
 transfer-files/
-data/
 udp/Logs/
 udp/ArchivosRecibidos/
 tcp/Logs/

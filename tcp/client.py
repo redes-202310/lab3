@@ -21,7 +21,7 @@ class Client(threading.Thread):
             tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             # Connect to the server
-            server_ip = "127.0.0.1" # Change this to the IP address of the server
+            server_ip = "localhost" # Change this to the IP address of the server
             server_port = 8002 # Change this to the port number that the server is listening on
             tcp_socket.connect((server_ip, server_port))
 

@@ -12,7 +12,7 @@ BLOCK_SIZE = 10 * 1024 * 1024
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to a port
-server_ip = "127.0.0.1" # Change this to the IP address of the server
+server_ip = "localhost" # Change this to the IP address of the server
 server_port = 8002 # Change this to the port number that the server will listen on
 tcp_socket.bind((server_ip, server_port))
 
@@ -40,7 +40,6 @@ def calculate_hash(file_path):
         sha256 = hashlib.sha256()
         with open(file_path, 'rb') as f:
             while True:
-                
                 data = f.read(BLOCK_SIZE)
                 if not data:
                     break
@@ -102,6 +101,7 @@ def send_file(client_socket, file_path):
 # Function to handle a client connection
 def handle_client(client_socket, client_address, file_path):
     # Send a message to the client to indicate that it has successfully connected
+    # print(f"Handling client {client_socket}")
     client_socket.send(b"You have successfully connected to the server.")
 
     # Wait for the client to signal that it is ready to receive the file

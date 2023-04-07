@@ -7,3 +7,4 @@ tcp/ArchivosRecibidos/
 tcp/Logs/
 udp/data/
 tcp/data/
+*.pcap

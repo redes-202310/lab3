@@ -11,7 +11,7 @@ ip_address = "127.0.0.1"
 port_number = 8000 
 udp_socket.bind((ip_address, port_number))
 
-FRAGMENT_SIZE = 8000  # TODO: ask if KB is Kilo or Kibi
+FRAGMENT_SIZE = 8000
 
 file_paths = {"file_100MB": "data/file-100.txt", "file_250MB": "data/file-250.txt", "lorem": "data/lorem.txt"}
 file_sizes = {"file_100MB": os.path.getsize(file_paths["file_100MB"]), "file_250MB": os.path.getsize(file_paths["file_250MB"]), "lorem": os.path.getsize(file_paths["lorem"])}

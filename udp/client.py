@@ -8,6 +8,7 @@ port_number = 8000
 
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+
 FRAGMENT_SIZE = 8000
 
 # set up the directories to store the files and logs
@@ -46,7 +47,7 @@ def handle_client_request(client_socket, client_num, test_num):
         while True:
             chunk_data, server_addr = client_socket.recvfrom(FRAGMENT_SIZE)
             file.write(chunk_data)
-            print(len(chunk_data))
+            # print(len(chunk_data))
             if len(chunk_data) < FRAGMENT_SIZE:
                 break
     execution_time = time.time() - start_time

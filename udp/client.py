@@ -52,7 +52,7 @@ def handle_client_request(client_socket, client_num, test_num):
                 break
     execution_time = time.time() - start_time
     log_file.write(f"Transfer time for client {client_num}: {execution_time}s\n")
-    print("File received successfully")
+    print(f"{client_num}: File received successfully")
 
 
 def determine_transfer_success(file_size):

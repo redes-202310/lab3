@@ -18,3 +18,7 @@ Para ejecutar alguno de los servidores, clone el repositorio en la máquina de e
 `python3.10 client.py` para los clientes
 
 Al ejecutar ambos, se genera en un directorio `\logs` los registros de cada interacción, como se especifican en el enunciado.
+
+# Capturas de Wireshark
+
+Con este [link](https://uniandes-my.sharepoint.com/:f:/g/personal/j_yepes_uniandes_edu_co/EipZlF_7DXNHrwIWFlpMbNAB9BVw62OUzPvn6DF7vbdK-Q?e=2kFuII) pueden acceder a la carpeta que contiene todas las capturas de wireshark. (Deben usar su cuenta uniandes para tener acceso)
